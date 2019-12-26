@@ -17,7 +17,7 @@ def main():
    
    print("main: hello from python\n", file=sys.stdout, flush=True)
    
-   slims = Slims("bigtest", "https://cfvcugimsdev002.fda.gov/slimsrest/", "sherwin.price", "87654321")
+   slims = Slims("bigtest", "https://cfvcugimsdev002.fda.gov/slimsrest/", "sherwin.price", "<pass>")
    content_records = slims.fetch("Content", equals("cntn_id", "ISO000105913"))
    for content_record in content_records:
         print(content_record.cntn_barCode.value + " " + content_record.cntn_fk_location.displayValue)
