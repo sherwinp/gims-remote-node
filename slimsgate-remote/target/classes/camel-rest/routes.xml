@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <restConfiguration component="servlet"/>
+    <rest>
+        <get uri="/cmd">
+			<to uri="bean:pythonInterpreter?method=runScript(${header.id})"/>
+        </get>
+    </rest>
+    <rest>
+        <get uri="/flow">
+			<to uri="bean:pythonInterpreter?method=runScript(${header.id})"/>
+        </get>
+    </rest>    
+</rests>
