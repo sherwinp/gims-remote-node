@@ -1,0 +1,56 @@
+[
+ {
+  "biosample_accession": "SAMN0000001",
+  "sample_name": "",
+  "assembly_date": "",
+  "assembly_name": "",
+  "assembly_method": "MaSuRCA",
+  "assembly_method_version": "8",
+  "genome_coverage": "11x",
+  "sequencing_technology": "PacBio",
+  "reference_genome": "GCA_001743455.1 ",
+  "update_for": "",
+  "bacteria_available_from": "",
+  "filename": "genome1.fsa",
+  "geocoordinates": {
+    "latitude": "30.75",
+    "longitude": "69.98"
+  }
+ },
+ {
+  "biosample_accession": "SAMN0000054",
+  "sample_name": "",
+  "assembly_date": "",
+  "assembly_name": "",
+  "assembly_method": "Newbler",
+  "assembly_method_version": "3",
+  "genome_coverage": "5x",
+  "sequencing_technology": "Illumina NextSeq 500",
+  "reference_genome": "",
+  "update_for": "ABDC00000000",
+  "bacteria_available_from": "",
+  "filename": "genome2.fsa",
+  "geocoordinates": {
+    "latitude": "30.75",
+    "longitude": "73.98"
+  }
+ },
+ {
+  "biosample_accession": "SAMN000466",
+  "sample_name": "",
+  "assembly_date": "",
+  "assembly_name": "",
+  "assembly_method": "Velvet",
+  "assembly_method_version": "16",
+  "genome_coverage": "8x",
+  "sequencing_technology": "Illumina MiSeq",
+  "reference_genome": "",
+  "update_for": "",
+  "bacteria_available_from": "Dr. Robert Smith lab at University of Wellness",
+  "filename": "genome3.fsa",
+  "geocoordinates": {
+    "latitude": "40.75",
+    "longitude": "73.98"
+  }
+  }
+]
