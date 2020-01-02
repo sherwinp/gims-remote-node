@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <body>
-<div id="login">
- <form id="auth" name="auth" action="/auth" method="post" enctype="multipart/form-data">
-  <label for="username"></label><input type="text" placeholder="username" name="username" id="username" required="required"/>
-  <label for="password"></label><input type="password" placeholder="password" name="password" id="password"  required="required"/>
+<div id="login"> 
+  <label for="username">Instrument Logs: </label><a href="instrument">Instrument</a>  
   <div>
-  <input type="submit" value="Login" />
- <form>
+    <h2>SSE Echo Demo</h2>
+    <div>
+      <input type="text" id="textID" name="message" value="Hello World">
+      <input type="button" id="sendID" value="Send" onclick="Window.App.setupEventSource()"/>
+    </div>
+    <hr/> 
+    <div id="output"></div>
   </div>
 </div>
 </body>

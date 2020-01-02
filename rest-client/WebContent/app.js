@@ -64,6 +64,8 @@ Window.App = (function(window) {
 						document.querySelector('section#main').innerHTML=text;
 					})
 					.then(function(){
+						var loginSection = document.querySelector('div#login>form');
+						if(loginSection!=null){
 						document.querySelector('div#login>form').addEventListener('click', function(event) {
 							event.preventDefault();
 							if(event.srcElement.value=='Login'){
@@ -75,6 +77,7 @@ Window.App = (function(window) {
 							}
 							console.log(event);
 						});
+						}
 					});				
 				}
 			});
@@ -82,7 +85,25 @@ Window.App = (function(window) {
 		}
 	}
 	
-	setTimeout( intf.AppLoad, 3000);
+	intf.setupEventSource = function() {
+        var output = document.getElementById("output");
+        if (typeof(EventSource) !== "undefined") {
+          var msg = document.getElementById("textID").value;
+          var source = new EventSource("sseasync?msg=" + msg);
+          source.onmessage = function(event) {
+            output.innerHTML += event.data + "<br>";
+          };
+          source.addEventListener('close', function(event) {
+            output.innerHTML += event.data + "<hr/>";
+            source.close();
+            }, false);
+        } else {
+          output.innerHTML = "Sorry, Server-Sent Events are not supported in your browser";
+        }
+        return false;
+      }
+	
+	setTimeout( intf.AppLoad, 1000);
 
 	return intf;
 })(Window);

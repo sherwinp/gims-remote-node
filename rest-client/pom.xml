@@ -88,10 +88,10 @@
 			<artifactId>camel-jms</artifactId>
 			<version>2.24.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-spring</artifactId>
+			<artifactId>activemq-all</artifactId>
 			<version>5.15.9</version>
 		</dependency>
 		<dependency>
@@ -99,7 +99,6 @@
 			<artifactId>spring-web</artifactId>
 			<version>5.1.6.RELEASE</version>
 		</dependency>
-
 
 	</dependencies>
 
