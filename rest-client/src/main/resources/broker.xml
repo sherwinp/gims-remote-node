@@ -9,9 +9,16 @@
 		xmlns="http://activemq.apache.org/schema/core" brokerName="localhost"
 		persistent="false" useJmx="true" dataDirectory="./activemq">
 		<transportConnectors>
-			<transportConnector uri="tcp://localhost:61616" />
+			<transportConnector uri="tcp://localhost:61616?persistent=false&amp;useJmx=true" />
+			<transportConnector name="stomp" uri="stomp://localhost:61613?persistent=false&amp;useJmx=true" />
 		</transportConnectors>
 
 	</broker>
+
+	<bean id="connectionFactory"
+		class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL"
+			value="vm://localhost?broker.persistent=false" />
+	</bean>
 
 </beans>
