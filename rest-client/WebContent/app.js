@@ -1,6 +1,6 @@
 'use strict';
 import * as jQuery from './jquery.min.js';
-Window.App = (function(window) {
+window.App = (function(window) {
 	
 	var intf = {};
 
@@ -53,7 +53,7 @@ Window.App = (function(window) {
 
 	intf.AppLoad = function(){
 		if(cookies.length){
-			
+		
 		}else{
 			fetch("app.html")
 			.then(function(response){

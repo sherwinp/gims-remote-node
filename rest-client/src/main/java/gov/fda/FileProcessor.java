@@ -22,13 +22,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import gov.fda.repository.Content;
-import gov.fda.repository.ContentDeserializer;
 import gov.fda.repository.ContentRepository;
 import gov.fda.repository.LocalRepository;
 
@@ -36,34 +37,23 @@ import gov.fda.repository.LocalRepository;
 public class FileProcessor implements ApplicationContextAware, Processor {
 	@Autowired
 	private ApplicationContext appCtx;
-	
-	ObjectMapper mapper = new ObjectMapper();
 
 	public FileProcessor() throws Exception {
-		SimpleModule module = new SimpleModule();
-		module.addDeserializer(Content.class, new ContentDeserializer());
-		mapper.registerModule(module);
 	}
 
 	public void process(Exchange exchange) throws Exception {
-		// File Body is JSON
-		process(exchange.getIn().getBody(String.class));
-	}
-
-	public void process(String jsonMessage) throws JsonParseException, JsonMappingException, IOException, SQLException {
-		// Deserialize JSON with parser
-		process(mapper.readValue(jsonMessage, Content.class));
+		// File Body is JSON		
+		process(new JsonFactory().createParser(exchange.getIn().getBody(String.class)));
 	}
 
 	@Transactional
-	public void process(Content isoContent) throws SQLException, IOException {
+	public void process(JsonParser parser) throws SQLException, IOException {
 		LocalRepository repository = appCtx.getBean(LocalRepository.class);
 		EntityManager em = repository.entityManagerFactory().createEntityManager();
 		EntityTransaction txn = em.getTransaction();
 		txn.begin();
 		try {
-			em.find(Content.class, isoContent.getCntn_id());
-			em.persist(isoContent);
+			new Content().store(em, parser);
 			txn.commit();
 		} catch (RuntimeException e) {
 			e.printStackTrace();

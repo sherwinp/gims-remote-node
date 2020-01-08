@@ -8,6 +8,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
+		    classpath:broker.xml,
 			classpath:camel-config.xml
 		</param-value>
 	</context-param>
@@ -28,7 +29,6 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-            classpath:broker.xml,
 			classpath:data-config.xml
             </param-value>
 		</init-param>
@@ -53,6 +53,8 @@
 		<web-resource-collection>
 			<web-resource-name>public-info</web-resource-name>
 			<url-pattern>/favicon.ico</url-pattern>
+			<url-pattern>/jquery.min.js</url-pattern>
+			<url-pattern>/app.js</url-pattern>
 		</web-resource-collection>
 		<!-- OMIT auth-constraint -->
 	</security-constraint>

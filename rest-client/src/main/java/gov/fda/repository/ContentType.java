@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ContentType")
+@Table(name="contenttype")
 public class ContentType implements Serializable {
+	@Id
+	private int cntp_pk;
 }

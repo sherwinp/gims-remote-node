@@ -25,7 +25,7 @@
 
 		<route id="fileInprogress">
 			<from
-				uri="file:{{filecollectionPath}}?preMove=.inprogress&amp;move=.done" />
+				uri="file:{{filecollectionPath}}?include=CFSAN.*meta.json$&amp;preMove=.inprogress&amp;move=.done" />
 			<log loggingLevel="INFO"
 				message="Moving file ${header.CamelFileName} to .inprogress" />
 			<to uri="bean:fileProcessor" />
