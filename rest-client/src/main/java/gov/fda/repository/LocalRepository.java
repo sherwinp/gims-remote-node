@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScans(value = {@ComponentScan("gov.fda.repository")})
+@ComponentScans(value = { @ComponentScan("gov.fda.repository") })
 public class LocalRepository implements ApplicationContextAware {
 	ApplicationContext appCtx;
 
@@ -37,7 +37,7 @@ public class LocalRepository implements ApplicationContextAware {
 	public DataSource dataSource() throws IOException {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		Properties props = getProperties();
-		
+
 		dataSource.setDriverClassName(props.getProperty("datasource.driver-class-name"));
 		dataSource.setUrl(props.getProperty("datasource.url"));
 		dataSource.setUsername(props.getProperty("datasource.username"));
@@ -47,24 +47,26 @@ public class LocalRepository implements ApplicationContextAware {
 	}
 
 	@Bean
-    public EntityManagerFactory entityManagerFactory() throws SQLException {
+	public EntityManagerFactory entityManagerFactory() throws SQLException {
 
-      HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-      vendorAdapter.setGenerateDdl(true);
-      vendorAdapter.setShowSql(true);
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setGenerateDdl(true);
+		vendorAdapter.setShowSql(true);
 
-      LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-      factory.setJpaVendorAdapter(vendorAdapter);
-      factory.setPackagesToScan("gov.fda.repository");
-      Properties props = null;
-      try {
-      factory.setDataSource(dataSource());
-      props = getProperties();
-      }catch(IOException e){
-    	  return null;
-      }
-      if (props.getProperty("spring.jpa.show-sql") != null) {
-    	  vendorAdapter.setShowSql(props.getProperty("spring.jpa.show-sql").startsWith("true"));
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setJpaVendorAdapter(vendorAdapter);
+		factory.setPackagesToScan("gov.fda.repository");
+		Properties props = null;
+		try {
+			props = getProperties();
+			DataSource ds = dataSource();
+			factory.setDataSource(dataSource());
+			
+		} catch (IOException e) {
+			return null;
+		}
+		if (props.getProperty("spring.jpa.show-sql") != null) {
+			vendorAdapter.setShowSql(props.getProperty("spring.jpa.show-sql").startsWith("true"));
 		} else {
 			vendorAdapter.setShowSql(true);
 		}
@@ -72,12 +74,12 @@ public class LocalRepository implements ApplicationContextAware {
 			vendorAdapter.setDatabasePlatform(props.getProperty("spring.jpa.database-platform"));
 		} else {
 			vendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServerDialect");
-		}      
-      factory.setJpaProperties(props);
-      factory.afterPropertiesSet();
+		}
+		factory.setJpaProperties(props);
+		factory.afterPropertiesSet();
 
-      return factory.getObject();
-    }
+		return factory.getObject();
+	}
 
 	@Bean(name = "transactionManager")
 	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {

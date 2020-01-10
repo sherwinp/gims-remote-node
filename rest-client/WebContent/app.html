@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1, width=device-width"/>
+<link rel="shortcut icon" type="image/png" href="favicon.ico"/>
+</head>
 <body>
 <div id="login"> 
-  <label for="username">Instrument Logs: </label><a href="instrument">Instrument</a>  
+  <label for="username">Instrument Logs: </label><a href="instrument">Instrument</a>
+  <a href="javascript:document.cookie = 'JSESSIONID ; expires = Thu, 01 Jan 1970 00:00:00 GMT'; location='signout';">sign out</a>  
   <div>
     <h2>SSE Echo Demo</h2>
     <div>
       <input type="text" id="textID" name="message" value="Hello World">
-      <input type="button" id="sendID" value="Send" onclick="App.setupEventSource()"/>
+      <input type="button" id="sendID" value="Send" onclick="window.App.setupEventSource()"/>
     </div>
     <hr/> 
     <div id="output"></div>

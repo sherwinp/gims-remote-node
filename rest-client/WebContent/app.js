@@ -4,8 +4,6 @@ window.App = (function(window) {
 	
 	var intf = {};
 
-    var cookies = document.cookie ? document.cookie.split('; ') : []
-
     String.prototype.format = function () {
         var attr = this;
         for (var j in arguments) {
@@ -39,18 +37,22 @@ window.App = (function(window) {
             return ans; 
     } 
 
-	let lHost = location.origin;    
-
-	intf.ws = new WebSocket("ws://{0}/{1}/websocketapp".format(location.host, location.pathname));
-	intf.ws.addEventListener('open', function open() {
-	  intf.ws.send('something');
-	});
 	
-	intf.ws.addEventListener('message', function incoming(data) {
-	  console.log("--WsSocketSource--");
-	  console.log(data);
-	});
-
+	var context = location.pathname.substring(0, location.pathname.indexOf("/",2)); 
+	var url = "ws://" + location.host + context + "/websocketapp";
+    var cookies = document.cookie ? document.cookie.split('; ') : []
+	if(cookies.length){
+		intf.ws = new WebSocket(url);
+	
+		intf.ws.addEventListener('open', function open() {
+		  intf.ws.send('something');
+		});
+		
+		intf.ws.addEventListener('message', function incoming(data) {
+		  console.log("--WsSocketSource--");
+		  console.log(data);
+		});		
+	}
 	intf.AppLoad = function(){
 		if(cookies.length){
 		
@@ -61,7 +63,9 @@ window.App = (function(window) {
 				if (contentType.includes('text/html')){
 					return response.text()
 					.then(function(text){
-						document.querySelector('section#main').innerHTML=text;
+						if(document.querySelector('section#main')!=null){
+							document.querySelector('section#main').innerHTML=text;
+						}
 					})
 					.then(function(){
 						var loginSection = document.querySelector('div#login>form');

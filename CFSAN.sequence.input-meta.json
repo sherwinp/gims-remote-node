@@ -1,0 +1,19 @@
+{
+	"import_file": "CFSAN00101_09_20200102_1216.trimmed.fastq.tgz",
+	"porerefiner_ver": "1.0.0",
+	"library_id": "LIB_TEST",
+	"dna kit": "TEST_DNAKIT",
+	"sequencing_kit": "SQK-RBK004",
+	"flowcell": "FAK80437",
+	"sequencer": "RogueOne",
+	"run_month": "11",
+	"run_year": "2019",
+	"run_id": "priceless_wing",
+	"sample_id": "SAMPLE_TEST_01",
+	"accession": "CFSAN00101",
+	"barcode_id": "09",
+	"organism": "Pseudomonas aeruginosa",
+	"extraction_kit": "TEST_KIT_KIT",
+	"comment": "If a comment were to be made this is what it would look like",
+	"user": "veet.voojagig@fda.hhs.gov"
+}

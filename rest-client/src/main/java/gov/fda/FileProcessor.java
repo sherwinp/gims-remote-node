@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,8 +13,10 @@ import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Handler;
 import org.apache.camel.Processor;
 import org.apache.camel.component.jackson.JacksonDataFormat;
+import org.apache.camel.spi.Registry;
 import org.apache.camel.util.jndi.JndiContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,21 +37,17 @@ import gov.fda.repository.ContentRepository;
 import gov.fda.repository.LocalRepository;
 
 @Component
-public class FileProcessor implements ApplicationContextAware, Processor {
-	@Autowired
-	private ApplicationContext appCtx;
-
+public class FileProcessor  {
+	LocalRepository repository = null;
 	public FileProcessor() throws Exception {
 	}
-
-	public void process(Exchange exchange) throws Exception {
+	
+	@Handler
+	public void process(Exchange exchange, Registry registry) throws Exception {
+		repository = registry.findByType(LocalRepository.class).stream().findFirst().get();
 		// File Body is JSON		
-		process(new JsonFactory().createParser(exchange.getIn().getBody(String.class)));
-	}
-
-	@Transactional
-	public void process(JsonParser parser) throws SQLException, IOException {
-		LocalRepository repository = appCtx.getBean(LocalRepository.class);
+		JsonParser parser = new JsonFactory().createParser(exchange.getIn().getBody(String.class));
+	
 		EntityManager em = repository.entityManagerFactory().createEntityManager();
 		EntityTransaction txn = em.getTransaction();
 		txn.begin();
@@ -61,11 +60,5 @@ public class FileProcessor implements ApplicationContextAware, Processor {
 			if (txn.isActive())
 				txn.rollback();
 		}
-
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-		appCtx = ctx;
 	}
 }

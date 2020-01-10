@@ -1,6 +1,7 @@
 package gov.fda.repository;
 
 import java.beans.Transient;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Entity
@@ -112,31 +114,43 @@ public class Content implements Serializable {
 
 	@Transient
 	public void store(EntityManager em, JsonParser parser) {
-		Query query = em.createNativeQuery("select max(cn.cntn_id), ct.cntp_pk from content cn \n"
+		while(!parser.isClosed()){
+			try {
+				JsonToken jsonToken = parser.nextToken();
+				if(JsonToken.FIELD_NAME.equals(jsonToken)){
+					switch(parser.getCurrentName().toLowerCase()) {
+					 case "sample_id":
+						 CreateContentType(em, "SMP", "sample");	
+						 break;
+					 case "accession":
+						 break;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		em.persist(this);
+	}
+
+	private void CreateContentType(EntityManager em, String bcFormat, String cntnType) {
+		String sqlString = String.format("select max(cn.cntn_id), ct.cntp_pk from content cn \n"
 				+ "right outer join contenttype ct on cn.cntn_fk_contentType =ct.cntp_pk "
-				+ " and ct.cntp_name like '%sample%'  group by ct.cntp_pk");
+				+ " and ct.cntp_name like '%s'  group by ct.cntp_pk", cntnType);
+		Query query = em.createNativeQuery(sqlString);
 		List<Object[]> result = query.getResultList();
 		Integer num = 1;
 		if (!result.isEmpty()) {
 			if (result.get(0) != null && result.get(0).length > 0 && result.get(0)[0] != null) {
 				num = Integer.parseInt(String.format("%s", result.get(0)[0]).substring(3)) + 1;
 			}
-			// always a contenttype definition
+			// a contenttype definition
 			setCntn_fk_contentType((Integer) result.get(0)[1]);
 		}
-		setCntn_barCode(String.format("SMP%08d", num));
+		setCntn_barCode(String.format("%s%08d", bcFormat, num));
 		setCntn_id(getCntn_barCode());
 		setCntn_createdBy(System.getenv("user"));
 		setCntn_modifiedOn(new java.sql.Date(new java.util.Date().getTime()));
-		em.persist(this);
-		/*
-		 * SELECT * FROM content where cntn_barCode = 'SMP000097463'
-		 * 
-		 * INSERT INTO GIMSDevDB_54.dbo.content (cntn_fk_location, cntn_id,
-		 * cntn_barCode, cntn_fk_contentType,cntn_fk_status, cntn_createdBy,
-		 * cntn_modifiedBy, cntn_modifiedOn) VALUES(5, 'SMP000097463', 'SMP000097463',
-		 * 5, 1028, 'SlimsGate','SlimsGate', getdate());
-		 */
 	}
-
 }

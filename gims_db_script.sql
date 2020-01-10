@@ -7,7 +7,7 @@ select top 10 * from attachment where attm_pk = 3400931
 select top 10 * from location where lctn_pk = 167
 
 --library_id     LIB_TEST
-select top 140 * from tablefield  
+select * from tablefield limit 40 
 where tbfl_name like '%kit%'
 select top 140 * from tablefieldvalue
 where tbfv_fk_tablefield = 133
@@ -45,9 +45,17 @@ where tbfl_name like '%run%'
 --sample_id   SAMPLE_TEST_01
 select top 1 * from contenttype   
 where cntp_name like '%sample%'
+
 --barcode_id  09
-select top 1 cntn_id, cntn_barCode from content 
-where cntn_fk_contentType = (select top 1 cntp_pk from contenttype where cntp_name like '%sample%')
+select max(cntn_id) , cntn_fk_contentType from content 
+where cntn_fk_contentType = (select cntp_pk from contenttype where cntp_name like '%sample%')
+group by cntn_fk_contentType
+
+select max(cn.cntn_id), ct.cntp_pk from content cn 
+right outer join contenttype ct on cn.cntn_fk_contentType =ct.cntp_pk and ct.cntp_name like '%sample%'  
+group by ct.cntp_pk
+
+select * from content
 
 --accession   CFSAN00101
 select top 4 * from tablefield  
