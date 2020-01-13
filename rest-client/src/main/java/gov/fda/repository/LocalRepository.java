@@ -75,6 +75,7 @@ public class LocalRepository implements ApplicationContextAware {
 		} else {
 			vendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServerDialect");
 		}
+		props.setProperty("hibernate.hbm2ddl.auto", "none");
 		factory.setJpaProperties(props);
 		factory.afterPropertiesSet();
 
